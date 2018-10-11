@@ -31,6 +31,9 @@ public class MemberController {
 	public String getAllMembers(Model model) {
 		
 		
+		
+		
+		
 		model.addAttribute("members", memberservice.getAllMembers());
 		return "listmembers";
 		
