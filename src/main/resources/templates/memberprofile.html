@@ -1,0 +1,29 @@
+<html xmlns:th="https://thymeleaf.org">  
+    <head>  
+        <title> Member profile Page</title>  
+    </head>  
+  <body>
+  
+  <table>
+    <thead>
+        <tr>
+            <th colspan="2"> ID </th>
+            <th colspan="2"> Name </th>
+            <th colspan="2"> Mobile </th>
+            <th colspan="2"> Groups </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="2" ><span th:text="${member.memberId}"> ID </span></td>
+            <td colspan="2"><span th:text="${member.memberName}"> Name </span></td>
+            <td colspan="2"><span th:text="${member.membermobile}"> Mobile </span></td>
+          <tr th:each="group: ${member.groups}">
+            <td colspan="10"><span th:text="${group.groupName}"> Mobile </span></td>
+        </th:each>
+        </tr>
+        
+    </tbody>
+</table>
+	</body>
+</html>

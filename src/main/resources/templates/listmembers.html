@@ -1,0 +1,30 @@
+<html xmlns:th="https://thymeleaf.org">  
+    <head>  
+        <title>list Member Page</title>  
+    </head>  
+  <body>
+  
+  <table>
+    <thead>
+        <tr>
+            <th colspan="2"> ID </th>
+            <th colspan="2"> Name </th>
+            <th colspan="2"> Mobile </th>
+            <th colspan="2"> Groups </th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${members.empty}">
+            <td colspan="2"> No members Available </td>
+        </tr>
+        <tr th:each="member : ${members}">
+            <td colspan="2"><span th:text="${member.memberId}"> ID </span></td>
+            <td colspan="2"><span th:text="${member.memberName}"> Name </span></td>
+            <td colspan="2"><span th:text="${member.membermobile}"> Mobile </span></td>
+            <td colspan="2"><span th:text="${member.groups}"> Mobile </span></td>
+            
+        </tr>
+    </tbody>
+</table>
+	</body>
+</html>
