@@ -22,7 +22,7 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
 	@Query("SELECT u FROM Bid u WHERE u.draw = :ID ")
 	public List<Bid> findByDrawId(@Param("ID") Draw draw);
 	
-	@Query("SELECT b FROM Bid b JOIN Draw d ON d.drawID = b.draw AND d.group = :groupId AND b.status = :status ")
-	public List<Bid> getBidForTheGroupByStatus(@Param("groupId") Group group, @Param("status")BidStatus status);
+	@Query("SELECT b FROM Bid b JOIN Draw d ON d.drawID = b.draw AND b.draw = :DrawId AND b.status = :status ")
+	public List<Bid> getBidForTheGroupByStatus(@Param("DrawId") Draw draw, @Param("status")BidStatus status);
 
 }

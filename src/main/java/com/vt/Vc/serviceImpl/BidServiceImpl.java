@@ -1,8 +1,8 @@
 package com.vt.Vc.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.vt.Vc.enumerate.BidStatus;
 import com.vt.Vc.enumerate.DrawStatus;
-import com.vt.Vc.enumerate.groupStatus;
 import com.vt.Vc.model.Bid;
 import com.vt.Vc.model.Draw;
 import com.vt.Vc.model.Group;
@@ -54,7 +53,7 @@ public class BidServiceImpl implements BidService {
 	}
 
 	@Override
-	public void PutBid(double amount, Member member, Group group, Draw draw) {
+	public void PutBid(double amount, Member member, Draw draw) {
 		
 		
 		if (drawrepository.findById(draw.getDrawID()).get().getStatus().equals(DrawStatus.RUNNING)) {
@@ -114,9 +113,13 @@ public class BidServiceImpl implements BidService {
 	@Override
 	public String StartBid(double amount, Member member, Group group, Draw draw) {
 
-		if (bidRepository.getBidForTheGroupByStatus(group, BidStatus.INITIAL).stream().count() == 0) {
+		if (bidRepository.getBidForTheGroupByStatus(draw, BidStatus.INITIAL).stream().count() == 0) {
+			
+			
 			logger.info("Starting.....Bid for the group" + group.getGroupName() + "with" + "Draw number:"
 					+ draw.getDrawNumber() + "For which intial bid is:" + amount);
+			
+			
 			Bid StartBid = Bid.builder().bidAmount(amount).bidder(member).draw(draw).status(BidStatus.INITIAL).build();
 			bidRepository.save(StartBid);
 			logger.info("Bid Started");
@@ -129,30 +132,23 @@ public class BidServiceImpl implements BidService {
 	}
 
 	@Override
-	public void closeBidding(Draw draw) {
+	public Bid closeBidding(Draw draw) {
 		
 		List<Bid> bidList=bidRepository.findByDrawId(draw);
-		Bid currentBid=bidList.parallelStream().filter(getPredicateFilter(BidStatus.CURRENT)).findAny().get();
-		Bid InitialBid=bidList.parallelStream().filter(getPredicateFilter(BidStatus.INITIALSARKARI)).findAny().get();
+		Optional<Bid> currentBid=bidList.parallelStream().filter(getPredicateFilter(BidStatus.CURRENT)).findAny();
 		logger.info("Closing the bidding for: "+currentBid);
-		currentBid.setStatus(BidStatus.FINAL);
-		bidRepository.save(currentBid);
-		
-		Draw currentDraw=currentBid.getDraw();
-		currentDraw.setEndAmount(currentBid.getBidAmount());
-		currentDraw.setMember(currentBid.getBidder());
-		currentDraw.setStatus(DrawStatus.COMPLETED);
-		currentDraw.setStartAmount(InitialBid.getBidAmount());
-		currentDraw.setDrawNumber(currentDraw.getDrawNumber()+1);
-		
-		drawrepository.save(currentDraw);
-		
-		Group group=currentDraw.getGroup();
-		group.setNumberofDrawDone(currentDraw.getDrawNumber());
-		group.setStatus(groupStatus.RUNNING);
-		groupRepository.save(group);
+		if(currentBid.isPresent()) {
+			currentBid.get().setStatus(BidStatus.FINAL);
+			bidRepository.save(currentBid.get());
+		}
+		else {
+			logger.info("need of the lucky system here");
+			//get a random member from the available member
+			//this.PutBid(currentBid.get().getBidAmount()-1, , draw);
+		}
 		
 		
+		return currentBid.get();
 		
 		
 		

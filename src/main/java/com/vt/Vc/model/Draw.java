@@ -37,7 +37,8 @@ public class Draw {
 	private Long drawID;
 	
 	@Column(name="DRAW_DATE")
-	private LocalDate drawDate;
+	@Builder.Default
+	private LocalDate drawDate=LocalDate.now();
 	
 	@ManyToOne
 	@JoinColumn(name="GROUP_ID", nullable=false)
@@ -51,7 +52,7 @@ public class Draw {
 	private double endAmount;
 	
 	@ManyToOne
-	@JoinColumn(name="MEMBER_ID", nullable=false)
+	@JoinColumn(name="MEMBER_ID")
 	private Member member;
 	
 	@OneToMany(mappedBy="draw")

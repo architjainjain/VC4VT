@@ -52,7 +52,7 @@ public class Bid implements Serializable {
 	private Draw draw;
 	
 	@ManyToOne
-	@JoinColumn(name="MEMBER_ID", nullable=false)
+	@JoinColumn(name="MEMBER_ID")
 	private Member bidder;
 	
 	@Column(name="STATUS", nullable=false)

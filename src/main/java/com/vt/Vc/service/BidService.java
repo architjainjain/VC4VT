@@ -4,6 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.vt.Vc.model.Bid;
 import com.vt.Vc.model.Draw;
 import com.vt.Vc.model.Group;
 import com.vt.Vc.model.Member;
@@ -12,10 +13,10 @@ import com.vt.Vc.model.Member;
 public interface BidService {
 	
 	@Transactional
-	public void PutBid(double amount, Member member, Group group, Draw draw);
+	public void PutBid(double amount, Member member, Draw draw);
 	
 	public String StartBid(double amount, Member member, Group group, Draw draw);
 	
-	public void closeBidding(Draw draw);
+	public Bid closeBidding(Draw draw);
 
 }

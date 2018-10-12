@@ -4,6 +4,7 @@ public enum groupStatus {
 	
 	RUNNING,
 	COMPLETED,
+	DRAWUNDERPROCESS,
 	NEW;
 
 }

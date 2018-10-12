@@ -29,47 +29,55 @@ import com.vt.Vc.repository.DrawRepository;
 import com.vt.Vc.repository.GroupRepository;
 import com.vt.Vc.repository.MemberRepository;
 import com.vt.Vc.service.BidService;
+import com.vt.Vc.service.DrawService;
+import com.vt.Vc.service.GroupService;
 import com.vt.Vc.serviceImpl.BidServiceImpl;
 
 @SpringBootApplication
-@EntityScan(basePackages="com.vt.Vc.*")
+@EntityScan(basePackages = "com.vt.Vc.*")
 @ComponentScan("com.vt.Vc.*")
 @EnableJpaRepositories
-public class VcApplication implements CommandLineRunner{
+public class VcApplication implements CommandLineRunner {
 
 	@Autowired
 	MemberRepository memberreposritory;
-	
+
 	@Autowired
 	GroupRepository grouprepo;
-	
+
 	@Autowired
 	BidRepository bidrepo;
-	
+
 	@Autowired
 	DrawRepository drawrepo;
-	
+
 	@Autowired
 	BidService bidService;
-	
+
+	@Autowired
+	DrawService drawService;
+
+	@Autowired
+	GroupService groupService;
+
 	public static void main(String[] args) {
-		
+
 		SpringApplication.run(VcApplication.class, args);
-		
+
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-			
-		List<Member> ls= new ArrayList<>();
-			Member m1= Member.builder().memberName("A1").membermobile("1231").memberStatus(MemberStatus.NEW).build();
-			Member m2= Member.builder().memberName("A2").membermobile("1232").memberStatus(MemberStatus.NEW).build();
-			Member m3= Member.builder().memberName("A3").membermobile("1233").memberStatus(MemberStatus.NEW).build();
-			Member m4= Member.builder().memberName("A4").membermobile("1234").memberStatus(MemberStatus.NEW).build();
-			Member m5=Member.builder().memberName("A5").membermobile("1235").memberStatus(MemberStatus.NEW).build();
-			Member m6=Member.builder().memberName("A6").membermobile("1236").memberStatus(MemberStatus.NEW).build();
-			Member m7=Member.builder().memberName("A7").membermobile("1237").memberStatus(MemberStatus.NEW).build();
-			Member m8= Member.builder().memberName("A8").membermobile("1238").memberStatus(MemberStatus.NEW).build();
+
+		List<Member> ls = new ArrayList<>();
+		Member m1 = Member.builder().memberName("A1").membermobile("1231").memberStatus(MemberStatus.NEW).build();
+		Member m2 = Member.builder().memberName("A2").membermobile("1232").memberStatus(MemberStatus.NEW).build();
+		Member m3 = Member.builder().memberName("A3").membermobile("1233").memberStatus(MemberStatus.NEW).build();
+		Member m4 = Member.builder().memberName("A4").membermobile("1234").memberStatus(MemberStatus.NEW).build();
+		Member m5 = Member.builder().memberName("A5").membermobile("1235").memberStatus(MemberStatus.NEW).build();
+		Member m6 = Member.builder().memberName("A6").membermobile("1236").memberStatus(MemberStatus.NEW).build();
+		Member m7 = Member.builder().memberName("A7").membermobile("1237").memberStatus(MemberStatus.NEW).build();
+		Member m8 = Member.builder().memberName("A8").membermobile("1238").memberStatus(MemberStatus.NEW).build();
 		ls.add(m1);
 		ls.add(m2);
 		ls.add(m3);
@@ -79,67 +87,74 @@ public class VcApplication implements CommandLineRunner{
 		ls.add(m6);
 		ls.add(m7);
 		memberreposritory.saveAll(ls);
-		
-		
-		Set<Member> ms= new HashSet<>();
+
+		Set<Member> ms = new HashSet<>();
 		ms.add(m3);
 		ms.add(m4);
 		ms.add(m5);
-		Group g1= Group.builder().
-					groupName("First Group").
-					description("Sample 1").
-					interesetRate(1).
-					groupStartDate(LocalDate.now()).
-					groupEndDate(null).
-					noOfMembers(12).
-					status(groupStatus.NEW).memberslist(ms).build();
-					
+		Group g1 = Group.builder().groupName("First Group").description("Sample 1").interesetRate(1)
+				.groupStartDate(LocalDate.now()).groupEndDate(null).noOfMembers(12).status(groupStatus.NEW)
+				.memberslist(ms).build();
+
 		grouprepo.save(g1);
-		
-		//ms.clear();
+
+		// ms.clear();
 		ms.add(m7);
 		ms.add(m6);
-		Group g2=Group.builder().
-				groupName("Second Group").
-				description("Sample 2").
-				interesetRate(2).
-				groupStartDate(LocalDate.now()).
-				groupEndDate(null).
-				noOfMembers(12).
-				status(groupStatus.NEW).memberslist(ms).build();
+		Group g2 = Group.builder().groupName("Second Group").description("Sample 2").interesetRate(2)
+				.groupStartDate(LocalDate.now()).groupEndDate(null).noOfMembers(12).status(groupStatus.NEW)
+				.memberslist(ms).build();
 		grouprepo.save(g2);
-		
-		/*DrawId*/
-		Draw d1= Draw.builder().drawDate(LocalDate.now()).group(g1).member(m3).status(DrawStatus.RUNNING).build();
-		drawrepo.save(d1);
-		
-		Draw d2= Draw.builder().drawDate(LocalDate.now()).group(g2).member(m3).status(DrawStatus.RUNNING).build();
-		drawrepo.save(d2);
-		/* bidding */		
-		bidService.StartBid(100, m3, g1, d1);
-		
-		bidService.StartBid(100, m7, g2, d2);
-		
-		bidService.StartBid(100, m3, g1, d1);
-		
-		bidService.PutBid(99, m3, g1, d1);
-		bidService.PutBid(98, m3, g1, d1);
-		
-		bidService.PutBid(90, m7, g2, d2);
-		
-		bidService.closeBidding(d1);
-		
-		
-		bidService.closeBidding(d2);
-		
-		bidService.StartBid(100, m6, g1, d1);
-		//bidService.PutBid(500, m2, g1, d1);
-		
-		//bidrepo.findAll();
-		
-		
-		
+
+		Draw d1 = groupService.performDraw(g1);
+		groupService.UpdateBid(g1, m7, 999);
+//		bidService.PutBid(88, m7, d1);
+//		bidService.PutBid(87, m4, d1);
+//		bidService.PutBid(86, m5, d1);
+		groupService.completeDraw(g1);
+
+		/* DrawId */
+		//Draw d1 = Draw.builder().drawDate(LocalDate.now()).group(g1).member(m3).status(DrawStatus.RUNNING).build();
+		// drawrepo.save(d1);
+
+		Draw d2 = Draw.builder().drawDate(LocalDate.now()).group(g2).member(m3).status(DrawStatus.RUNNING).build();
+		// drawrepo.save(d2);
+
+		// d1=drawService.StartDraw(g1);
+
+		// d2=drawService.StartDraw(g2);
+
+		/* bidding */
+//		bidService.StartBid(100, m3, g1, d1);
+//		
+//		bidService.StartBid(100, m7, g2, d2);
+//		
+//		bidService.StartBid(100, m3, g1, d1);
+//		
+
+//		bidService.PutBid(99, m3, d1);
+//		bidService.PutBid(80, m3, d2);
+//		
+//		drawService.CompleteDraw(g1);
+//		
+//		d1=drawService.StartDraw(g1);
+//		bidService.PutBid(88, m7, d1);
+//		bidService.PutBid(87, m4, d1);
+//		bidService.PutBid(86, m5, d1);
+//		drawService.CompleteDraw(g1);
+
+//		bidService.PutBid(90, m7, g2, d2);
+//		
+//		bidService.closeBidding(d1);
+//		
+//		
+//		bidService.closeBidding(d2);
+//		
+//		bidService.StartBid(100, m6, g1, d1);
+		// bidService.PutBid(500, m2, g1, d1);
+
+		// bidrepo.findAll();
+
 	}
-	
-	
+
 }
