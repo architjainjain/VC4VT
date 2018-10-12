@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.vt.Vc.enumerate.BidStatus;
 import com.vt.Vc.model.Bid;
+import com.vt.Vc.model.Draw;
+import com.vt.Vc.model.Group;
 
 @Repository
 public interface BidRepository extends JpaRepository<Bid, Long> {
@@ -17,7 +19,10 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
 	public List<Bid> findByStatus(@Param("status")BidStatus initial);
 	
 	
-	@Query("SELECT u FROM Bid u WHERE u.bidID = :ID ")
-	public List<Bid> findByDrawId(@Param("ID") Long Id);
+	@Query("SELECT u FROM Bid u WHERE u.draw = :ID ")
+	public List<Bid> findByDrawId(@Param("ID") Draw draw);
+	
+	@Query("SELECT b FROM Bid b JOIN Draw d ON d.drawID = b.draw AND d.group = :groupId AND b.status = :status ")
+	public List<Bid> getBidForTheGroupByStatus(@Param("groupId") Group group, @Param("status")BidStatus status);
 
 }

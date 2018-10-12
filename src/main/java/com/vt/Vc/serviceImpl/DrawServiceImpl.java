@@ -13,10 +13,12 @@ public class DrawServiceImpl implements DrawService {
 	@Autowired
 	private DrawRepository drawRepository;
 	
+	
 	@Override
 	public void StartDraw(Group group) {
 		
-drawRepository.findAll();
+			drawRepository.findAll().stream().filter(predicate)
+		
 	}
 
 	@Override

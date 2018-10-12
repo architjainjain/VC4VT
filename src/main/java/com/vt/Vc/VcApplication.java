@@ -17,6 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.vt.Vc.enumerate.BidStatus;
+import com.vt.Vc.enumerate.DrawStatus;
 import com.vt.Vc.enumerate.MemberStatus;
 import com.vt.Vc.enumerate.groupStatus;
 import com.vt.Vc.model.Bid;
@@ -109,14 +110,30 @@ public class VcApplication implements CommandLineRunner{
 		grouprepo.save(g2);
 		
 		/*DrawId*/
-		Draw d1= Draw.builder().drawDate(LocalDate.now()).group(g1).member(m3).drawNumber(1).build();
+		Draw d1= Draw.builder().drawDate(LocalDate.now()).group(g1).member(m3).status(DrawStatus.RUNNING).build();
 		drawrepo.save(d1);
 		
+		Draw d2= Draw.builder().drawDate(LocalDate.now()).group(g2).member(m3).status(DrawStatus.RUNNING).build();
+		drawrepo.save(d2);
+		/* bidding */		
+		bidService.StartBid(100, m3, g1, d1);
 		
-		/* bidding */
-		Bid b1=Bid.builder().bidAmount(99).bidder(m3).draw(d1).status(BidStatus.INITIAL).build();
+		bidService.StartBid(100, m7, g2, d2);
 		
 		bidService.StartBid(100, m3, g1, d1);
+		
+		bidService.PutBid(99, m3, g1, d1);
+		bidService.PutBid(98, m3, g1, d1);
+		
+		bidService.PutBid(90, m7, g2, d2);
+		
+		bidService.closeBidding(d1);
+		
+		
+		bidService.closeBidding(d2);
+		
+		bidService.StartBid(100, m6, g1, d1);
+		//bidService.PutBid(500, m2, g1, d1);
 		
 		//bidrepo.findAll();
 		
