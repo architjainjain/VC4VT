@@ -1,6 +1,7 @@
 package com.vt.Vc;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -60,14 +61,14 @@ public class VcApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 			
 		List<Member> ls= new ArrayList<>();
-			Member m1=new Member("A", "1234", null, null, null, MemberStatus.NEW);
-			Member m2=new Member("b", "12345", null, null, null, MemberStatus.NEW);
-			Member m3=new Member( "Ac", "12346", null, null, null, MemberStatus.NEW);
-			Member m4=new Member( "Ad", "12344", null, null, null, MemberStatus.NEW);
-			Member m5=new Member( "Ae", "12341", null, null, null, MemberStatus.NEW);
-			Member m6=new Member( "Af", "12342", null, null, null, MemberStatus.NEW);
-			Member m7=new Member( "Ag", "12343", null, null, null, MemberStatus.NEW);
-			Member m8=new Member( "Ah", "12374", null, null, null, MemberStatus.NEW);
+			Member m1= Member.builder().memberName("A1").membermobile("1231").memberStatus(MemberStatus.NEW).build();
+			Member m2= Member.builder().memberName("A2").membermobile("1232").memberStatus(MemberStatus.NEW).build();
+			Member m3= Member.builder().memberName("A3").membermobile("1233").memberStatus(MemberStatus.NEW).build();
+			Member m4= Member.builder().memberName("A4").membermobile("1234").memberStatus(MemberStatus.NEW).build();
+			Member m5=Member.builder().memberName("A5").membermobile("1235").memberStatus(MemberStatus.NEW).build();
+			Member m6=Member.builder().memberName("A6").membermobile("1236").memberStatus(MemberStatus.NEW).build();
+			Member m7=Member.builder().memberName("A7").membermobile("1237").memberStatus(MemberStatus.NEW).build();
+			Member m8= Member.builder().memberName("A8").membermobile("1238").memberStatus(MemberStatus.NEW).build();
 		ls.add(m1);
 		ls.add(m2);
 		ls.add(m3);
@@ -83,27 +84,41 @@ public class VcApplication implements CommandLineRunner{
 		ms.add(m3);
 		ms.add(m4);
 		ms.add(m5);
-		Group g1=new Group("firstGroup", "sample group", 1, null, 12, null, 0, groupStatus.NEW, ms, null);
+		Group g1= Group.builder().
+					groupName("First Group").
+					description("Sample 1").
+					interesetRate(1).
+					groupStartDate(LocalDate.now()).
+					groupEndDate(null).
+					noOfMembers(12).
+					status(groupStatus.NEW).memberslist(ms).build();
+					
 		grouprepo.save(g1);
 		
 		//ms.clear();
 		ms.add(m7);
 		ms.add(m6);
-		Group g2=new Group("secondGroup", "sample group 2", 2, null, 12, null, 0, groupStatus.NEW, ms, null);
+		Group g2=Group.builder().
+				groupName("Second Group").
+				description("Sample 2").
+				interesetRate(2).
+				groupStartDate(LocalDate.now()).
+				groupEndDate(null).
+				noOfMembers(12).
+				status(groupStatus.NEW).memberslist(ms).build();
 		grouprepo.save(g2);
 		
 		/*DrawId*/
-		Draw d1= Draw.builder().drawDate(null).group(g1).member(m3).drawNumber(1).build();
+		Draw d1= Draw.builder().drawDate(LocalDate.now()).group(g1).member(m3).drawNumber(1).build();
 		drawrepo.save(d1);
 		
 		
 		/* bidding */
 		Bid b1=Bid.builder().bidAmount(99).bidder(m3).draw(d1).status(BidStatus.INITIAL).build();
-		bidrepo.save(b1);
 		
 		bidService.StartBid(100, m3, g1, d1);
 		
-		bidrepo.findAll();
+		//bidrepo.findAll();
 		
 		
 		

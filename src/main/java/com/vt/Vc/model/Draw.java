@@ -1,6 +1,6 @@
 package com.vt.Vc.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,15 +14,17 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name="DRAW")
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 public class Draw {
 
 	@Id
@@ -31,7 +33,7 @@ public class Draw {
 	private Long drawID;
 	
 	@Column(name="DRAW_DATE")
-	private Date drawDate;
+	private LocalDate drawDate;
 	
 	@ManyToOne
 	@JoinColumn(name="GROUP_ID", nullable=false)

@@ -30,10 +30,6 @@ public class MemberController {
 	@GetMapping(value="/member")
 	public String getAllMembers(Model model) {
 		
-		
-		
-		
-		
 		model.addAttribute("members", memberservice.getAllMembers());
 		return "listmembers";
 		

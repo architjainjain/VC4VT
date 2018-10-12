@@ -28,12 +28,12 @@ public class BidServiceImpl implements BidService {
 	@Override
 	public void StartBid(double amount, Member member, Group group, Draw draw) {
 		Bid StartBid=Bid.builder().bidAmount(amount).bidder(member).draw(draw).status(BidStatus.INITIAL).build();
-		bidRepository.findAll();
-		//mem.findAll();
-		List<Bid> b=bidRepository.findByDrawId(11L);//findByStatus(BidStatus.INITIAL.getValue());
+		System.out.println(StartBid);
+		bidRepository.save(StartBid);
+		List<Bid> b=bidRepository.findByStatus(BidStatus.INITIAL);
 		b.stream().forEach((p)->System.out.println(p));
 		
-		b=bidRepository.findByStatus(BidStatus.INITIAL);
+		//b=bidRepository.findByStatus(BidStatus.INITIAL);
 		
 		//System.out.println(b.getBidder());
 	}
